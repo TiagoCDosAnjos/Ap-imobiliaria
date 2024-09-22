@@ -32,7 +32,6 @@ public class Comanda : BaseModel
 
     public virtual List<Consumo>? Consumos { get; set; }
 
-
     public double TotalCusto()
     {
         double totalCusto = 0.0;
@@ -52,8 +51,6 @@ public class Comanda : BaseModel
 
         return totalVenda;
     }
-
-
 }
 
 public class ComandaFiltro
@@ -69,7 +66,5 @@ public class ComandaFiltro
     public DateTime? DataInicio { get; set; }
     public DateTime? DataFim { get; set; }
     public string? TermoBusca { get; set; }
-
     public bool? Pago { get; set; }
-
 }

@@ -10,7 +10,6 @@
 
         //Somada do TotalCusto das comandas
         public double CustoTotal { get; set; }
-
         public double LucroTotal { get; set; }
     }
 }
