@@ -1,0 +1,25 @@
+﻿@model Cliente
+
+
+<h1>Editar Cliente</h1>
+
+<form method='post' asp-action="Editar" asp-controller="Clientes">
+    <input type='hidden' id='index' name='index' value='@ViewBag.Index'>
+
+    <div class="mb-3">
+        <label for="id" class="form-label">Id</label>
+        <input class="form-control" type='text' id='id' name='id' value='@Model.Id'>
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Nome, new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.Nome, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Nome)
+      
+        @if (ViewBag.Error != string.Empty)
+        {
+            <p> @ViewBag.Error </p>
+        }
+    </div>
+    <button class="btn btn-primary" type='submit'> Editar </button>
+</form>
+

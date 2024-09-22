@@ -1,0 +1,36 @@
+﻿<html>
+<head>
+    <title>Controle de bar</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/site.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+</head>
+
+<body>
+    
+@* @Html.Partial("_Cabecalho") *@
+<partial name="_Cabecalho"/>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            2024 - Controle De Bar- <a asp-controller="Clientes" asp-action="Index">Clientes</a>
+        </div>
+    </footer>
+
+
+    @RenderSection("Scripts", required: false)
+
+    <!-- Scripts do Bootstrap  -->
+    <script src="~/lib/bootstrap/js/bootstrap.js"></script> 
+
+   
+
+</body>
+</html>

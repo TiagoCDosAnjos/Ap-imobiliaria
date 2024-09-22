@@ -1,0 +1,26 @@
+﻿@model ControleDeBar.Model.Cliente
+
+<div class="container mt-5">
+    <legend class="mb-4">Adição de Cliente</legend>
+
+    <!-- Formulário de Adição -->
+    <form method="post" action="/clientes/adicionar">
+        <input type="hidden" name="Id" id="Id" value="@Model.Id" />
+
+        <div class="mb-3">
+            <label class="form-label" for="nome">Nome:</label>
+            <input class="form-control" type="text" id="nome" name="nome" required value="@Model.Nome">
+            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(ViewBag.Error))
+        {
+            <div class="alert alert-danger" role="alert">
+                @ViewBag.Error
+            </div>
+        }
+
+        <button class="btn btn-primary" type="submit">Adicionar Cliente</button>
+    </form>
+</div>
+

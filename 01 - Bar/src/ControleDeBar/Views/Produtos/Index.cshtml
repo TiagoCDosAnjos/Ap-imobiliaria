@@ -1,0 +1,55 @@
+﻿@model IEnumerable<ControleDeBar.Model.Produto>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1 class="cabecalho-produto">Produtos</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-outline-dark">Criar novo produto</a>
+</p>
+
+<table style="border: solid; border-color: pink;border-style: dashed;" class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Descricao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PrecoDeCompra)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PrecoDeVenda)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Descricao)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PrecoDeCompra)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PrecoDeVenda)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-dark">Editar</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-dark">Detalhes</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-dark">Deletar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
