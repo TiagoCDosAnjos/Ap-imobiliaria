@@ -5,152 +5,152 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Imobiliaria.Web;
+using Imobiliaria.Dominio.Models.ModuloCliente;
+using Imobiliaria.Web.Models.Validations;
+
 
 namespace Imobiliaria.Web.Controllers
 {
-    public class ClientesController : Controller
-    {
-        private readonly ImobiliariaDbContext _context;
+	public class ClientesController : Controller
+	{
+		private readonly IServiceCliente _serviceCliente;
 
-        public ClientesController(ImobiliariaDbContext context)
-        {
-            _context = context;
-        }
+		public ClientesController(IServiceCliente serviceCliente)
+		{
+			_serviceCliente = serviceCliente;
+		}
 
-        // GET: Clientes
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Clientes.ToListAsync());
-        }
+		// GET: Clientes
+		public async Task<IActionResult> Index()
+		{
+			var clientesVo = _serviceCliente.TragaTodosClientes();
 
-        // GET: Clientes/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+			return View(clientesVo.ToClientesViewModel());
+		}
 
-            var cliente = await _context.Clientes
-                .FirstOrDefaultAsync(m => m.ClienteId == id);
-            if (cliente == null)
-            {
-                return NotFound();
-            }
+		// GET: Clientes/Details/5
+		public async Task<IActionResult> Details(int? id)
+		{
+			if (id == null)
+			{
+				return NotFound();
+			}
 
-            return View(cliente);
-        }
+			var cliente = _serviceCliente.TragaClientePorId(id.Value);
+			if (cliente == null)
+			{
+				return NotFound();
+			}
 
-        // GET: Clientes/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
+			return View(cliente.ToClienteViewModel());
+		}
 
-        // POST: Clientes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ClienteId,Nome,Cpf,Telefone,Email")] Cliente cliente)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(cliente);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(cliente);
-        }
+		// GET: Clientes/Create
+		public IActionResult Create()
+		{
+			return View();
+		}
 
-        // GET: Clientes/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+		// POST: Clientes/Create
+		// To protect from overposting attacks, enable the specific properties you want to bind to.
+		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Create(CreateClienteViewModel cliente)
+		{
+			if (ModelState.IsValid)
+			{
+				try
+				{
+					_serviceCliente.CriarCliente(cliente.ToClienteVo());
+					return RedirectToAction(nameof(Index));
+				}
+				catch (Exception ex)
+				{
+					ModelState.AddModelError("", $"Erro na criação : {ex.Message}");
+				}
+			}
+			return View(cliente);
+		}
 
-            var cliente = await _context.Clientes.FindAsync(id);
-            if (cliente == null)
-            {
-                return NotFound();
-            }
-            return View(cliente);
-        }
+		// GET: Clientes/Edit/5
+		public async Task<IActionResult> Edit(int? id)
+		{
+			if (id == null)
+			{
+				return NotFound();
+			}
 
-        // POST: Clientes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ClienteId,Nome,Cpf,Telefone,Email")] Cliente cliente)
-        {
-            if (id != cliente.ClienteId)
-            {
-                return NotFound();
-            }
+			var clientesVo = _serviceCliente.TragaTodosClientes();
+			var cliente = clientesVo.FirstOrDefault(m => m.ClienteId == id);
+			if (cliente == null)
+			{
+				return NotFound();
+			}
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(cliente);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ClienteExists(cliente.ClienteId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(cliente);
-        }
+			return View(cliente.ToClienteViewModel());
+		}
 
-        // GET: Clientes/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+		// POST: Clientes/Edit/5
+		// To protect from overposting attacks, enable the specific properties you want to bind to.
+		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Edit(int id, ClienteViewModel cliente)
+		{
+			if (id != cliente.ClienteId)
+			{
+				return NotFound();
+			}
 
-            var cliente = await _context.Clientes
-                .FirstOrDefaultAsync(m => m.ClienteId == id);
-            if (cliente == null)
-            {
-                return NotFound();
-            }
+			if (ModelState.IsValid)
+			{
+				try
+				{
+					_serviceCliente.SalvarCliente(cliente.ToClienteVo());
+					return RedirectToAction(nameof(Index));
+				}
+				catch (Exception ex)
+				{
+					ModelState.AddModelError("", $"Erro no editar : {ex.Message}");
+				}
+			}
+			return View(cliente);
+		}
 
-            return View(cliente);
-        }
+		// GET: Clientes/Delete/5
+		public async Task<IActionResult> Delete(int? id)
+		{
+			if (id == null)
+			{
+				return NotFound();
+			}
 
-        // POST: Clientes/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var cliente = await _context.Clientes.FindAsync(id);
-            if (cliente != null)
-            {
-                _context.Clientes.Remove(cliente);
-            }
+			var cliente = _serviceCliente.TragaClientePorId(id.Value);
+			if (cliente == null)
+			{
+				return NotFound();
+			}
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+			return View(cliente.ToClienteViewModel());
+		}
 
-        private bool ClienteExists(int id)
-        {
-            return _context.Clientes.Any(e => e.ClienteId == id);
-        }
-    }
+		// POST: Clientes/Delete/5
+		[HttpPost, ActionName("Delete")]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> DeleteConfirmed(int id)
+		{
+			try
+			{
+				_serviceCliente.Remover(id);
+				return RedirectToAction(nameof(Index));
+			}
+			catch (Exception ex)
+			{
+				ModelState.AddModelError("", $"Erro no deletar : {ex.Message}");
+			}
+
+			return View(_serviceCliente.TragaClientePorId(id).ToClienteViewModel());
+		}
+	}
 }

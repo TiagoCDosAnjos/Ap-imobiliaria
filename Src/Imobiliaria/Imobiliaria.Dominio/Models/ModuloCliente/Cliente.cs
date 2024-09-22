@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Imobiliaria.Web;
 
-namespace Imobiliaria.Web;
+namespace Imobiliaria.Dominio.Models.ModuloCliente;
 
 public partial class Cliente
 {

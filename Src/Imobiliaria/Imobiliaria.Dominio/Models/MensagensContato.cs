@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Imobiliaria.Dominio.Models.ModuloCliente;
 
 namespace Imobiliaria.Web;
 
